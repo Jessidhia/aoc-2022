@@ -11,20 +11,20 @@ fn parse(input: &str) -> IResult<&str, Vec<Vec<u32>>> {
         many1(line_ending),
         separated_list1(
             line_ending,
-            map_res(digit1, |input| u32::from_str_radix(input, 10)),
+            map_res(digit1, |input: &str| input.parse::<u32>()),
         ),
     )(input)
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
     let list = parse(input).unwrap().1;
-    let totals = list.into_iter().map(|item| item.into_iter().sum::<u32>());
+    let totals = list.into_iter().map(|items| items.into_iter().sum::<u32>());
     Some(totals.max().unwrap_or(0))
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
     let list = parse(input).unwrap().1;
-    let totals = list.into_iter().map(|item| item.into_iter().sum::<u32>());
+    let totals = list.into_iter().map(|items| items.into_iter().sum::<u32>());
     let top3 = totals.sorted_unstable().rev().take(3);
     Some(top3.sum::<u32>())
 }
